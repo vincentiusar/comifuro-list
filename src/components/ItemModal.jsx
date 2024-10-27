@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import MerchModal from './MerchModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveBarang } from '../redux/sliceBarang';
+import { toast } from 'react-toastify';
 
 function ItemModal({setHidden}) {
 
@@ -20,10 +21,20 @@ function ItemModal({setHidden}) {
     });
 
     const [merch, setMerch] = useState({
-        tipeItem: null,
-        price: 0,
+        tipeItem: 'ganci',
+        price: 15000,
         foto: null,
     });
+
+    const toCurrency = (e) => {
+        let res = "";
+
+        for (let i = e.length - 1, j = 0; i >= 0; j++, i--) {
+            if (j % 3 === 0) res = ' ' + res;
+            res = e[i] + res;
+        }
+        return res;
+    }
 
     const getBase64Image = async (img) => {
         const reader = new FileReader();
@@ -78,8 +89,10 @@ function ItemModal({setHidden}) {
 
         const e = [...barang];
         e.push(data);
+
         dispatch(saveBarang(e));
         setHidden(false);
+        toast.success("Toko Added!");
     }
 
     return (
@@ -121,11 +134,11 @@ function ItemModal({setHidden}) {
                                 <label>Items: </label>
                                 <div className='w-full border'>
                                     {data.items.map((item, key) => (
-                                        <div className='grid grid-cols-4 items-center' key={key}>
+                                        <div className='grid grid-cols-11 items-center' key={key}>
                                             <p className='col-span-1'>{key+1}</p>
-                                            <img className='col-span-1' src={item.foto} />
-                                            <p className='col-span-1'>{item.tipeItem}</p>
-                                            <p className='col-span-1'>{item.price}</p>
+                                            <img className='col-span-4' src={item.foto} />
+                                            <p className='col-span-2'>{item.tipeItem}</p>
+                                            <p className='col-span-4'>Rp{toCurrency(item.price.toString())},-</p>
                                         </div>
                                     ))}
                                 </div>

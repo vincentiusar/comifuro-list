@@ -16,3 +16,16 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.rs-panel-title {
+  color: rgba(150, 150, 150, 1) !important;
+  width: @apply w-full !important;
+}
+
+.rs-panel-btn-icon.rs-icon.rs-icon path {
+  fill: white !important;
+}
+
+.rs-panel-btn:hover .rs-panel-btn:focus .rs-panel-btn:active {
+  background-color: rgba(0, 0, 0, 1) !important;
+}

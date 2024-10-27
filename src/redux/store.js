@@ -1,8 +1,8 @@
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import { combineReducers } from "redux";
 import { persistReducer, persistStore } from "redux-persist";
-import storage from "redux-persist/lib/storage";
 import sliceBarang from "./sliceBarang";
+import localforage from "localforage";
 
 const reducer = combineReducers({
     barang: sliceBarang,
@@ -10,7 +10,7 @@ const reducer = combineReducers({
 
 const persistConfig = {
     key: 'root',
-    storage
+    storage: localforage
 }
 
 const persistedReducer = persistReducer(persistConfig, reducer);
