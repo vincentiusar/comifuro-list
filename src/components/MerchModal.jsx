@@ -75,7 +75,7 @@ function MerchModal({data, setData, setHidden, mainData, setMainData}) {
         e.totalCost = Number(e.totalCost) + Number(data.price);
         setMainData(e);
         setHidden(false);
-        setData({ foto: null, tipeItem: "Ganci", price: 15000 });
+        setData({ foto: null, tipeItem: "ganci", price: 15000 });
         toast.success("Merch Added");
     }
 
