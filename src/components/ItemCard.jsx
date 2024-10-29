@@ -8,6 +8,7 @@ import Accordion from 'rsuite/Accordion';
 import 'rsuite/Accordion/styles/index.css';
 import { useDispatch } from 'react-redux';
 import { deleteBarang } from '../redux/sliceBarang';
+import { toast } from 'react-toastify';
 
 function ItemCard({ barang }) {
 
@@ -28,6 +29,7 @@ function ItemCard({ barang }) {
         if (!confirm) return;
 
         dispatch(deleteBarang({ 'id': barang.id }));
+        toast.success(`Toko ${barang.name} deleted!`);
     }
 
     return (

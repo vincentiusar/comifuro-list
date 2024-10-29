@@ -3,16 +3,36 @@ import { toast } from 'react-toastify';
 
 function MerchModal({data, setData, setHidden, mainData, setMainData}) {
 
-    const getBase64Image = async (img) => {
+    const getBase64Image = async (image) => {
         const reader = new FileReader();
         let res = null;
 
         await new Promise((resolve, reject) => {
-            reader.onload = async () => {
-                res = reader.result;
-                resolve(res);
+            reader.onload = function(e) {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+
+                    const maxWidth = 800;
+                    const scaleFactor = maxWidth / img.width;
+                    canvas.width = maxWidth;
+                    canvas.height = img.height * scaleFactor;
+
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                    const quality = 0.5;
+                    res = canvas.toDataURL("image/jpeg", quality)
+                    // var stringLength = res.length - 'data:image/png;base64,'.length;
+                    // var sizeInBytes = 4 * Math.ceil((stringLength / 3))*0.5624896334383812;
+                    // var sizeInKb = sizeInBytes/1000;
+                    // console.log("SIZE: ", sizeInKb);
+
+                    resolve(res);
+                };
             };
-            reader.readAsDataURL(img.files[0]);
+            reader.readAsDataURL(image.files[0]);
         });
 
         return res;
@@ -24,7 +44,6 @@ function MerchModal({data, setData, setHidden, mainData, setMainData}) {
             setData({...data, [e.target.name]: imgData});
             return;
         }
-        console.log(e.target.value);
 
         setData({...data, [e.target.name]: e.target.value});
     }
@@ -56,7 +75,7 @@ function MerchModal({data, setData, setHidden, mainData, setMainData}) {
         e.totalCost = Number(e.totalCost) + Number(data.price);
         setMainData(e);
         setHidden(false);
-        setData({ foto: null, tipeItem: null, price: 0 });
+        setData({ foto: null, tipeItem: "Ganci", price: 15000 });
         toast.success("Merch Added");
     }
 

@@ -21,8 +21,6 @@ function Home() {
         });
         setTotal(toCurrency(x.toString()));
         setData(barang);
-        console.log(barang);
-        
     }, [data, barang]);
 
     const toCurrency = (e) => {
