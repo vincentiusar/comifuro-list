@@ -177,7 +177,7 @@ function ItemModal({setHidden}) {
                     </div>
                 </div>
             </div>
-            <div className='fixed top-0 left-0 w-screen h-screen bg-black opacity-40'></div>
+            <div className='fixed top-0 left-0 w-screen h-screen bg-black opacity-40 z-40'></div>
         </>
     )
 }

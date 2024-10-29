@@ -41,7 +41,7 @@ function Home() {
 
     return (
         <div>
-            <div className="fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-200 dark:bg-gray-700 dark:border-gray-600">
+            <div className="fixed bottom-0 left-0 z-40 w-full h-16 bg-white border-t border-gray-200 dark:bg-gray-700 dark:border-gray-600">
                 <div className="grid h-full max-w-lg grid-cols-2 mx-auto font-medium">
                     <button onClick={() => setCurrentPage(1)} type="button" className={`inline-flex flex-col items-center justify-center px-5 ${currentPage === 1 ? 'bg-gray-50' : ''} ${currentPage === 1 ? "dark:bg-gray-800" : ""} group`}>
                         <svg className="w-5 h-5 mb-2 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
