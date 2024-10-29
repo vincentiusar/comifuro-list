@@ -6,8 +6,12 @@ import 'swiper/css/navigation';
 import { Autoplay } from 'swiper/modules';
 import Accordion from 'rsuite/Accordion';
 import 'rsuite/Accordion/styles/index.css';
+import { useDispatch } from 'react-redux';
+import { deleteBarang } from '../redux/sliceBarang';
 
 function ItemCard({ barang }) {
+
+    const dispatch = useDispatch();
 
     const toCurrency = (e) => {
         let res = "";
@@ -19,8 +23,16 @@ function ItemCard({ barang }) {
         return res;
     }
 
+    const handleDelete = () => {
+        const confirm = window.confirm(`sure want to delete ${barang.nama}`);
+        if (!confirm) return;
+
+        dispatch(deleteBarang({ 'id': barang.id }));
+    }
+
     return (
         <div className='flex flex-col items-center w-full border-2 rounded-lg border-pink-400 p-3 gap-4'>
+            <button onClick={handleDelete} type="button" className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
             <div className="relative w-full bg-white" data-carousel="slide">
                 <div className='w-full'>
                     <Swiper

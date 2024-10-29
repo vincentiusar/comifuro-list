@@ -88,7 +88,9 @@ function ItemModal({setHidden}) {
         if (!confirm) return;
 
         const e = [...barang];
-        e.push(data);
+        const d = {...data};
+        d.id = Number(new Date());
+        e.unshift(d);
 
         dispatch(saveBarang(e));
         setHidden(false);
