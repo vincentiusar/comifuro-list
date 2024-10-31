@@ -15,14 +15,14 @@ function MerchModal({data, setData, setHidden, mainData, setMainData}) {
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
 
-                    const maxWidth = 800;
+                    const maxWidth = 1200;
                     const scaleFactor = maxWidth / img.width;
                     canvas.width = maxWidth;
                     canvas.height = img.height * scaleFactor;
 
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-                    const quality = 0.5;
+                    const quality = 1;
                     res = canvas.toDataURL("image/jpeg", quality)
                     // var stringLength = res.length - 'data:image/png;base64,'.length;
                     // var sizeInBytes = 4 * Math.ceil((stringLength / 3))*0.5624896334383812;
@@ -71,20 +71,24 @@ function MerchModal({data, setData, setHidden, mainData, setMainData}) {
         if (!confirm) return;
 
         const e = {...mainData};
-        e.items.push(data);
+        const items = [...e.items];
+        items.push(data);
+        e.items = items;
         e.totalCost = Number(e.totalCost) + Number(data.price);
         setMainData(e);
         setHidden(false);
-        setData({ foto: null, tipeItem: "ganci", price: 15000 });
-        toast.success("Merch Added");
+        setData({ id: Number(new Date()), foto: null, tipeItem: "ganci", price: 15000 });
+        toast.success("Merch Added",{
+            position: "bottom-center"
+        });
     }
 
     return (
         <div>
-            <div id="static-modal" tabIndex="-1" aria-hidden="true" className="overflow-y-auto overflow-x-hidden fixed top-0 w-5/6 z-50 justify-center items-center h-[calc(100%-1rem)] max-h-full">
+            <div id="static-modal" tabIndex="-1" className="overflow-y-auto overflow-x-hidden fixed top-0 w-5/6 z-50 justify-center items-center h-[calc(100%-1rem)] max-h-full">
                 <div className="relative w-full max-w-2xl max-h-full">
                     <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <div className="sticky top-0 bg-gray-700 flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                                 Add Merch
                             </h3>

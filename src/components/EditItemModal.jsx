@@ -4,21 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { saveBarang } from '../redux/sliceBarang';
 import { toast } from 'react-toastify';
 
-function ItemModal({setHidden}) {
+function EditItemModal({setHidden, data, setData}) {
 
-    const barang = useSelector(state => state.barang.barang.items);
+    let barang = useSelector(state => state.barang.barang.items);
     const dispatch = useDispatch();
 
     const [showModal, setShowModal] = useState(false);
-    const [data, setData] = useState({
-        id: null,
-        nama: null,
-        nomor: null,
-        fotoToko: null,
-        fotoNamecard: null,
-        totalCost: 0,
-        items: [],
-    });
 
     const [merch, setMerch] = useState({
         id: Number(new Date()),
@@ -49,14 +40,14 @@ function ItemModal({setHidden}) {
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
 
-                    const maxWidth = 1200;
+                    const maxWidth = 800;
                     const scaleFactor = maxWidth / img.width;
                     canvas.width = maxWidth;
                     canvas.height = img.height * scaleFactor;
 
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-                    const quality = 1;
+                    const quality = 0.5;
                     res = canvas.toDataURL("image/jpeg", quality)
                     // var stringLength = res.length - 'data:image/png;base64,'.length;
                     // var sizeInBytes = 4 * Math.ceil((stringLength / 3))*0.5624896334383812;
@@ -82,26 +73,26 @@ function ItemModal({setHidden}) {
         setData({...data, [e.target.name]: e.target.value});
     }
 
-    const handleCancel = () => {
-        const e = {...data};
-        let hasInput = false;
-        Object.entries(e).forEach(item => {
-            if (item[1] && item[0] !== 'totalCost' && item[0] !== 'items') {
-                hasInput = true;
+    const handleSubmit = () => {
+        const confirm = window.confirm('confirm?');
+        if (!confirm) return;
+
+        const e = [...barang];
+        let d = {...data};
+        for (let i = 0; i < e.length; i++) {
+            if (e[i].id === data.id) {
+                e.splice(i, 1);
+                break;
             }
-            if (item[0] === 'items' && item[1].length !== 0) {                
-                hasInput = true;
-            }
+        }
+        d.id = Number(new Date());
+        e.unshift(d);
+
+        dispatch(saveBarang(e));
+        setHidden(false);
+        toast.success("Toko Edited!", {
+            position: "bottom-center"
         });
-
-        if (hasInput) {
-            const confirm = window.confirm('want to go back?');
-            if (confirm) setHidden(false);
-        } else setHidden(false);
-    }
-
-    const handleItemModal = () => {
-        setShowModal(!showModal);
     }
 
     const handleDelete = async (id) => {
@@ -109,31 +100,22 @@ function ItemModal({setHidden}) {
         if (!confirm) return;
 
         const d = {...data};
+        let items = [...d.items];
         let x = 0;
-        for (let i = 0; i < d.items.length; i++) {
-            if (d.items[i].id === Number(id)) {
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].id === Number(id)) {
                 x = i;
                 break;
             }
         }
-        d.items.splice(x, 1);
+        items.splice(x, 1);
+        d.items = items;
+        let totalCost = 0;
+        for (let x of d.items) {
+            totalCost += Number(x.price);
+        }
+        d.totalCost = totalCost;
         setData(d);
-    }
-
-    const handleSubmit = () => {
-        const confirm = window.confirm('confirm?');
-        if (!confirm) return;
-
-        const e = [...barang];
-        const d = {...data};
-        d.id = Number(new Date());
-        e.unshift(d);
-
-        dispatch(saveBarang(e));
-        setHidden(false);
-        toast.success("Toko Added!", {
-            position: "bottom-center"
-        });
     }
 
     return (
@@ -141,11 +123,11 @@ function ItemModal({setHidden}) {
             <div id="static-modal" tabIndex="-1" className="overflow-y-auto overflow-x-hidden fixed top-14 w-5/6 z-50 justify-center items-center h-5/6 rounded-lg">
                 <div className="relative w-full max-w-2xl max-h-full">
                     <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                        <div className="sticky top-0 bg-gray-700 flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                    <div className="sticky top-0 bg-gray-700 flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                                 Add Store
                             </h3>
-                            <button onClick={handleCancel} type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="static-modal">
+                            <button onClick={() => setHidden(false)} type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="static-modal">
                                 <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                                 </svg>
@@ -184,11 +166,11 @@ function ItemModal({setHidden}) {
                             </div>
                             <div className='flex items-center gap-3'>
                                 <label>Nama: </label>
-                                <input name='nama' type="text" onChange={handleChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Allenerie" required />
+                                <input name='nama' value={data?.nama} type="text" onChange={handleChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Allenerie" required />
                             </div>
                             <div className='flex items-center gap-3'>
                                 <label>No: </label>
-                                <input name='nomor' type="text" onChange={handleChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="AB-40" required />
+                                <input name='nomor' value={data?.nomor} type="text" onChange={handleChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="AB-40" required />
                             </div>
                             <div className='flex flex-col w-full items-start gap-3'>
                                 <label>Items: </label>
@@ -210,22 +192,22 @@ function ItemModal({setHidden}) {
                                         </div>
                                     ))}
                                 </div>
-                                <button type="button" onClick={handleItemModal} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                <button onClick={() => setShowModal(true)} type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                                     ADD ITEM
                                 </button>
-                                {showModal ? (<MerchModal data={merch} setData={setMerch} setHidden={setShowModal} mainData={data} setMainData={setData} />) : ""}
+                                {showModal ? (<MerchModal data={merch} setData={setMerch} setHidden={setShowModal} mainData={{...data}} setMainData={setData} />) : ""}
                             </div>
                         </div>
                         <div className="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                            <button onClick={handleSubmit} data-modal-hide="static-modal" type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add</button>
-                            <button onClick={handleCancel} data-modal-hide="static-modal" type="button" className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Cancel</button>
+                            <button onClick={handleSubmit} data-modal-hide="static-modal" type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Edit</button>
+                            <button onClick={() => setHidden(false)} data-modal-hide="static-modal" type="button" className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Cancel</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div onClick={() => setHidden(false)} className='fixed top-0 left-0 w-screen h-screen bg-black opacity-50 z-40'></div>
+            <div className='fixed top-0 left-0 w-screen h-screen bg-black opacity-40 z-40'></div>
         </>
     )
 }
 
-export default ItemModal;
+export default EditItemModal;

@@ -16,7 +16,7 @@ const Routers = () => {
                         <Route
                             path="/"
                             element={
-                                <div className="w-full">
+                                <div className="w-full h-screen">
                                     <Home />
                                 </div>
                             }

@@ -40,7 +40,7 @@ function Home() {
     }
 
     return (
-        <div>
+        <div className='m-auto text-center h-full'>
             <div className="fixed bottom-0 left-0 z-40 w-full h-16 bg-white border-t border-gray-200 dark:bg-gray-700 dark:border-gray-600">
                 <div className="grid h-full max-w-lg grid-cols-2 mx-auto font-medium">
                     <button onClick={() => setCurrentPage(1)} type="button" className={`inline-flex flex-col items-center justify-center px-5 ${currentPage === 1 ? 'bg-gray-50' : ''} ${currentPage === 1 ? "dark:bg-gray-800" : ""} group`}>
@@ -59,22 +59,23 @@ function Home() {
                 </div>
             </div>
             {currentPage === 1 ? (
-                <>
-                    <div className='flex flex-col items-center'>
-                        <div className='flex items-center'>
-                            <button type="button" onClick={handleModal} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                <div className='relative flex flex-col items-center h-full'>
+                    <div className='flex flex-col items-center p-6 fixed z-30 bg-[#242424] w-full'>
+                        <div className='flex flex-col items-center'>
+                            <button type="button" onClick={handleModal} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                                 ADD STORE
                             </button>
-                            <p>Total Spend: Rp. {total},-</p>
+                            <p className='text-xl font-thin'>Total Spend</p>
+                            <p className='font-semibold text-2xl'>Rp. {total},-</p>
                         </div>
                     </div>
-                    <div className='flex flex-col items-center w-full gap-9'>
+                    <div className='flex flex-col pb-36 px-8 overflow-y-auto items-center h-full w-full gap-9 pt-44 absolute'>
                         {data.length !== 0 ? data?.map((item, key) => (
                             <ItemCard key={key} barang={item} id={key} />
                         )) : ''}
                     </div>
                     {showModal ? (<ItemModal setHidden={setShowModal} />) : ""}
-                </>
+                </div>
             ) : (
                 <>
                     <div className='flex flex-col items-center'>
