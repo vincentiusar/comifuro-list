@@ -1,7 +1,7 @@
 import React from 'react'
 import { toast } from 'react-toastify';
 
-function MerchModal({data, setData, setHidden, mainData, setMainData}) {
+function MerchModal({data, setData, setHidden, mainData, setMainData, isEdit = false}) {
 
     const getBase64Image = async (image) => {
         const reader = new FileReader();
@@ -72,6 +72,14 @@ function MerchModal({data, setData, setHidden, mainData, setMainData}) {
 
         const e = {...mainData};
         const items = [...e.items];
+        if (isEdit) {
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].id === data.id) {
+                    items.splice(i, 1);
+                    break;
+                }
+            }
+        }
         items.push(data);
         e.items = items;
         e.totalCost = Number(e.totalCost) + Number(data.price);
@@ -100,9 +108,18 @@ function MerchModal({data, setData, setHidden, mainData, setMainData}) {
                             </button>
                         </div>
                         <div className="p-4 md:p-5 space-y-4 flex flex-col items-start">
-                            <div className='flex flex-col items-start gap-3'>
+                            <div className='flex flex-col items-start gap-3 w-full'>
                                 <label>Foto: </label>
-                                <input name='foto' onChange={handleChange} accept='image/*' capture='user' className="w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" required type="file" />
+                                <div className='flex items-center justify-evenly w-full'>
+                                    <label className='cursor-pointer'>
+                                        <input type="file" name='foto' onChange={handleChange} accept='image/*' capture='user' className='hidden' />
+                                        <span className="border px-7 py-2 w-full rounded-lg bg-blue-700 font-semibold">Camera</span>
+                                    </label>
+                                    <label className='cursor-pointer'>
+                                        <input type="file" name='foto' onChange={handleChange} accept='image/*' className='hidden' />
+                                        <span className="border px-4 py-2 rounded-lg bg-green-700 font-semibold">Upload File</span>
+                                    </label>
+                                </div>
                                 <img src={data.foto}></img>
                             </div>
                             <div className='flex items-center gap-4'>

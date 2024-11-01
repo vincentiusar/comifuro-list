@@ -77,20 +77,20 @@ function Home() {
                     {showModal ? (<ItemModal setHidden={setShowModal} />) : ""}
                 </div>
             ) : (
-                <>
-                    <div className='flex flex-col items-center'>
+                <div className='relative flex flex-col items-center h-full'>
+                    <div className='flex flex-col items-center p-6 fixed z-30 bg-[#242424] w-full'>
                         <div className='flex items-center'>
-                            <button type="button" onClick={handleWishlistModal} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                            <button type="button" onClick={handleWishlistModal} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                                 ADD Wishlist
                             </button>
                         </div>
                         <p>Search</p>
+                        <input type='text' />
                     </div>
-                    <div className='flex flex-col items-center w-full gap-9'>
-                        
+                    <div className='flex flex-col pb-36 px-8 overflow-y-auto items-center h-full w-full gap-9 pt-36 absolute'>
+                        {showWishlistModal ? 'sementara' : ''}
                     </div>
-                    {showWishlistModal ? 'sementara' : ''}
-                </>
+                </div>
             )}
         </div>
     )
