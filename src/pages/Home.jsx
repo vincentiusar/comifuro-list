@@ -68,6 +68,7 @@ function Home() {
                             <p className='text-xl font-thin'>Total Spend</p>
                             <p className='font-semibold text-2xl'>Rp. {total},-</p>
                         </div>
+                        <img src='./logocf.png' className='bg-white p-4 w-full absolute -z-10 opacity-5' />
                     </div>
                     <div className='flex flex-col pb-36 px-8 overflow-y-auto items-center h-full w-full gap-9 pt-44 absolute'>
                         {data.length !== 0 ? data?.map((item, key) => (

@@ -72,6 +72,9 @@ function MerchModal({data, setData, setHidden, mainData, setMainData, isEdit = f
 
         const e = {...mainData};
         const items = [...e.items];
+        items.push(data);
+        e.items = items;
+        let totalCost = 0;
         if (isEdit) {
             for (let i = 0; i < items.length; i++) {
                 if (items[i].id === data.id) {
@@ -80,14 +83,15 @@ function MerchModal({data, setData, setHidden, mainData, setMainData, isEdit = f
                 }
             }
         }
-        items.push(data);
-        e.items = items;
-        e.totalCost = Number(e.totalCost) + Number(data.price);
+        for (let x of e.items) {
+            totalCost += Number(x.price);
+        }
+        e.totalCost = totalCost;
         setMainData(e);
         setHidden(false);
         setData({ id: Number(new Date()), foto: null, tipeItem: "ganci", price: 15000 });
         toast.success("Merch Added",{
-            position: "bottom-center"
+            position: "top-center"
         });
     }
 

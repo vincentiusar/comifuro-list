@@ -71,6 +71,7 @@ function ItemCard({ barang }) {
                 </div>
             </div>
             <p className='text-2xl font-semibold line-clamp-2 w-5/6'>{barang.nama}</p>
+            <p className='text-2xl font-semibold line-clamp-2 w-5/6'>{barang.nomor}</p>
             <p className='text-xl font-light'>Total Spent: Rp. {toCurrency(barang.totalCost.toString())},-</p>
             <Accordion className='w-full'>
                 <Accordion.Panel header="Merch">
