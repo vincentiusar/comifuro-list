@@ -91,7 +91,8 @@ function MerchModal({data, setData, setHidden, mainData, setMainData, isEdit = f
         setHidden(false);
         setData({ id: Number(new Date()), foto: null, tipeItem: "ganci", price: 15000 });
         toast.success("Merch Added",{
-            position: "top-center"
+            position: "top-center",
+            autoClose: 2000
         });
     }
 

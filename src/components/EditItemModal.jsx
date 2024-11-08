@@ -93,7 +93,8 @@ function EditItemModal({ setHidden, data, setData }) {
         dispatch(saveBarang(e));
         setHidden(false);
         toast.success("Toko Edited!", {
-            position: "bottom-center"
+            position: "bottom-center",
+            autoClose: 2000
         });
     }
 

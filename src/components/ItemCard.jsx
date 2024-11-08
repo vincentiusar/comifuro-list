@@ -38,7 +38,8 @@ function ItemCard({ barang }) {
 
         dispatch(deleteBarang({ 'id': barang.id }));
         toast.success(`Toko ${barang.name} deleted!`, {
-            position: "bottom-center"
+            position: "bottom-center",
+            autoClose: 2000
         });
     }
 

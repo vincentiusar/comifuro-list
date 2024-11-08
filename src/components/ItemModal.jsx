@@ -134,7 +134,8 @@ function ItemModal({ setHidden }) {
         dispatch(saveBarang(e));
         setHidden(false);
         toast.success("Toko Added!", {
-            position: "bottom-center"
+            position: "bottom-center",
+            autoClose: 2000
         });
     }
 

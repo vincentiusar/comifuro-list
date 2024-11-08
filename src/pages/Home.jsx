@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import ItemModal from '../components/ItemModal';
 import { useSelector } from 'react-redux';
 import ItemCard from '../components/ItemCard';
+import WishlistModal from '../components/WishlistModal';
 
 function Home() {
     const barang = useSelector(state => state.barang.barang.items);
@@ -11,6 +12,8 @@ function Home() {
     const [showWishlistModal, setShowWishlistModal] = useState(false);
     const [data, setData] = useState([]);
     const [total, setTotal] = useState(0);
+    const [search, setSearch] = useState([]);
+    const ref1 = useRef();
 
     const handleModal = () => {
         setShowModal(!showModal);
@@ -21,12 +24,18 @@ function Home() {
     }
 
     useEffect(() => {
+        setSearch(barang);
+    }, []);
+
+    useEffect(() => {
         let x = 0;
         barang.map(item => {
             x += item.totalCost
         });
         setTotal(toCurrency(x.toString()));
         setData(barang);
+        setSearch(barang);
+        ref1.current.value = "";
     }, [data, barang]);
 
     const toCurrency = (e) => {
@@ -37,6 +46,19 @@ function Home() {
             res = e[i] + res;
         }
         return res;
+    }
+
+    const handleSearch = (e) => {
+        const res = data.filter(item => {
+            if (!item.nama && e.target.value === "") return item;
+            if (item.nama && (item.nama.toLowerCase()).includes(e.target.value?.toLowerCase())) {
+                return item;
+            }
+            if (item.nomor && (item.nomor.toLowerCase()).includes(e.target.value?.toLowerCase())) {
+                return item;
+            }
+        })
+        setSearch(res);
     }
 
     return (
@@ -68,10 +90,18 @@ function Home() {
                             <p className='text-xl font-thin'>Total Spend</p>
                             <p className='font-semibold text-2xl'>Rp. {total},-</p>
                         </div>
+                        <div className="relative w-full">
+                            <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                                </svg>
+                            </div>
+                            <input ref={ref1} onInput={handleSearch} type="search" className="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search" required />
+                        </div>
                         <img src='./logocf.png' className='bg-white p-4 w-full absolute -z-10 opacity-5' />
                     </div>
-                    <div className='flex flex-col pb-36 px-8 overflow-y-auto items-center h-full w-full gap-9 pt-44 absolute'>
-                        {data.length !== 0 ? data?.map((item, key) => (
+                    <div className='flex flex-col pb-36 px-8 overflow-y-auto items-center h-full w-full gap-9 pt-48 absolute'>
+                        {search.length !== 0 ? search?.map((item, key) => (
                             <ItemCard key={key} barang={item} id={key} />
                         )) : ''}
                     </div>
@@ -87,9 +117,10 @@ function Home() {
                         </div>
                         <p>Search</p>
                         <input type='text' />
+                        <img src='./logocf.png' className='bg-white p-4 w-full absolute -z-10 opacity-5' />
                     </div>
                     <div className='flex flex-col pb-36 px-8 overflow-y-auto items-center h-full w-full gap-9 pt-36 absolute'>
-                        {showWishlistModal ? 'sementara' : ''}
+                        {showWishlistModal ? <WishlistModal setHidden={handleWishlistModal} /> : ''}
                     </div>
                 </div>
             )}
