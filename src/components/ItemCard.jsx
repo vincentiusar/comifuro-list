@@ -11,7 +11,7 @@ import { deleteBarang } from '../redux/sliceBarang';
 import { toast } from 'react-toastify';
 import EditItemModal from './EditItemModal';
 
-function ItemCard({ barang }) {
+function ItemCard({ barang, viewOnly = false }) {
 
     const dispatch = useDispatch();
     const [showModal, setShowModal] = useState(false);
@@ -45,10 +45,14 @@ function ItemCard({ barang }) {
 
     return (
         <div className='flex flex-col items-center w-full border-4 rounded-lg border-cyan-500 p-3 gap-4'>
-            <div className='flex items-center justify-evenly w-full'>
-                <button onClick={() => handleEdit(barang)} type="button" className="w-20 focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:focus:ring-yellow-900">Edit</button>
-                <button onClick={handleDelete} type="button" className="w-20 focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
-            </div>
+            {!viewOnly ? (
+                <div className='flex items-center justify-evenly w-full'>
+                    <button onClick={() => handleEdit(barang)} type="button" className="w-20 focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:focus:ring-yellow-900">Edit</button>
+                    <button onClick={handleDelete} type="button" className="w-20 focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
+                </div>
+            ) : (
+                <></>
+            )}
             <div className="relative w-full bg-white" data-carousel="slide">
                 <div className='w-full'>
                     <Swiper
@@ -71,7 +75,7 @@ function ItemCard({ barang }) {
                     </Swiper>
                 </div>
             </div>
-            <p className='text-2xl font-semibold line-clamp-2 w-5/6'>{barang.nama}</p>
+            <p className='text-2xl font-semibold line-clamp-2 w-5/6 text-center'>{barang.nama}</p>
             <p className='text-2xl font-semibold line-clamp-2 w-5/6'>{barang.nomor}</p>
             <p className='text-xl font-light'>Total Spent: Rp. {toCurrency(barang.totalCost.toString())},-</p>
             <Accordion className='w-full'>

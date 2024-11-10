@@ -5,6 +5,7 @@ import { persistor, store } from "../redux/store";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import Home from "../pages/Home";
+import Import from "../pages/Import";
 
 const Routers = () => {
     return (
@@ -18,6 +19,15 @@ const Routers = () => {
                             element={
                                 <div className="w-full h-screen">
                                     <Home />
+                                </div>
+                            }
+                        />
+
+                        <Route
+                            path="/import"
+                            element={
+                                <div className="w-full h-screen">
+                                    <Import />
                                 </div>
                             }
                         />

@@ -102,10 +102,6 @@ function ItemModal({ setHidden }) {
         } else setHidden(false);
     }
 
-    const handleItemModal = () => {
-        setShowModal(!showModal);
-    }
-
     const handleDelete = async (id) => {
         const confirm = await window.confirm(`delete item`);
         if (!confirm) return;

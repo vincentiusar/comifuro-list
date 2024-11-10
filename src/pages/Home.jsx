@@ -4,9 +4,11 @@ import { useSelector } from 'react-redux';
 import ItemCard from '../components/ItemCard';
 import WishlistModal from '../components/WishlistModal';
 import ExportModal from '../components/ExportModal';
+import { useNavigate } from 'react-router-dom';
 
 function Home() {
     const barang = useSelector(state => state.barang.barang.items);
+    const navigate = useNavigate();
 
     const [currentPage, setCurrentPage] = useState(1);
     const [showModal, setShowModal] = useState(false);
@@ -26,7 +28,7 @@ function Home() {
     }
 
     useEffect(() => {
-        setSearch(barang);
+        setSearch([...barang]);
     }, []);
 
     useEffect(() => {
@@ -94,8 +96,11 @@ function Home() {
                                 <button type="button" onClick={handleModal} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                                     ADD STORE
                                 </button>
-                                <button type="button" onClick={handleExportModal} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                <button type="button" onClick={handleExportModal} className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 focus:outline-none">
                                     Export
+                                </button>
+                                <button type="button" onClick={() => navigate('/import')} className="text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 focus:outline-none">
+                                    Import
                                 </button>
                             </div>
                             <p className='text-xl font-thin'>Total Spend</p>

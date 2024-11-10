@@ -69,7 +69,7 @@ function ExportModal({ setHidden }) {
             lnk.setAttribute("href", d);
             lnk.setAttribute("download", "comifuro-list.json");
             lnk.click();
-            toast.success("All images exported");
+            toast.success("All Data exported");
             setHidden(false);
         }
     }
