@@ -3,12 +3,14 @@ import ItemModal from '../components/ItemModal';
 import { useSelector } from 'react-redux';
 import ItemCard from '../components/ItemCard';
 import WishlistModal from '../components/WishlistModal';
+import ExportModal from '../components/ExportModal';
 
 function Home() {
     const barang = useSelector(state => state.barang.barang.items);
 
     const [currentPage, setCurrentPage] = useState(1);
     const [showModal, setShowModal] = useState(false);
+    const [showExportModal, setShowExportModal] = useState(false);
     const [showWishlistModal, setShowWishlistModal] = useState(false);
     const [data, setData] = useState([]);
     const [total, setTotal] = useState(0);
@@ -61,6 +63,10 @@ function Home() {
         setSearch(res);
     }
 
+    const handleExportModal = () => {
+        setShowExportModal(true);
+    }
+
     return (
         <div className='m-auto text-center h-full'>
             <div className="fixed bottom-0 left-0 z-40 w-full h-16 bg-white border-t border-gray-200 dark:bg-gray-700 dark:border-gray-600">
@@ -84,9 +90,14 @@ function Home() {
                 <div className='relative flex flex-col items-center h-full'>
                     <div className='flex flex-col items-center p-6 fixed z-30 bg-[#242424] w-full'>
                         <div className='flex flex-col items-center'>
-                            <button type="button" onClick={handleModal} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                                ADD STORE
-                            </button>
+                            <div className='flex items-center gap-3'>
+                                <button type="button" onClick={handleModal} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                    ADD STORE
+                                </button>
+                                <button type="button" onClick={handleExportModal} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                    Export
+                                </button>
+                            </div>
                             <p className='text-xl font-thin'>Total Spend</p>
                             <p className='font-semibold text-2xl'>Rp. {total},-</p>
                         </div>
@@ -106,6 +117,7 @@ function Home() {
                         )) : ''}
                     </div>
                     {showModal ? (<ItemModal setHidden={setShowModal} />) : ""}
+                    {showExportModal ? (<ExportModal setHidden={setShowExportModal} />) : ""}
                 </div>
             ) : (
                 <div className='relative flex flex-col items-center h-full'>
